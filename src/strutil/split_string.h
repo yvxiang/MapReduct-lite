@@ -68,12 +68,12 @@ template <typename T>
 struct back_insert_iterator {
   explicit back_insert_iterator(T& t) : t_(t) {}
 
-  back_insert_iterator<T>& operator=(const typename T::value_type& value) {
-    t_.push_back(value);
-    return *this;
+  back_insert_iterator<T>& operator=(const typename T::value_type& new_mem) {
+	t_.push_back(new_mem);
+	return *this;
   }
 
-  back_insert_iterator<T>& operator*() { return *this; }
+  back_insert_iterator<T>& operator*()	{ return *this; }
   back_insert_iterator<T>& operator++() { return *this; }
   back_insert_iterator<T> operator++(int placeholder) { return *this; }
 

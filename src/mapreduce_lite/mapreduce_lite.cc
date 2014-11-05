@@ -276,6 +276,7 @@ void MapOutput(int reduce_worker_id, const string& key, const string& value) {
         LOG(FATAL) << "Send error to reduce worker: " << reduce_worker_id;
       }
     } else {
+	  LOG(INFO) << "yvxiang: NumReduceWorkers(): " << NumReduceWorkers();
       for (int r_id = 0; r_id < NumReduceWorkers(); ++r_id) {
         if (GetCommunicator()->Send(
                 GetMapOutputSendBuffer().get(),

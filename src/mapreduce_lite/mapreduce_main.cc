@@ -21,6 +21,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
 #include "gflags/gflags.h"
 #include "src/mapreduce_lite/flags.h"
 #include "src/mapreduce_lite/mapreduce_lite.h"
+#include <unistd.h>
 
 namespace mapreduce_lite {
 bool IAmMapWorker();
@@ -47,6 +48,14 @@ int main(int argc, char** argv) {
   LOG(INFO) << "I am a " << (mapreduce_lite::IAmMapWorker() ? "map worker" :
                              "reduce worker");
 
+sleep(100);
+/*
+  size_t i;
+  for(i = 0; i < argc; i++)
+	LOG(INFO) << argv[i] << std::endl;
+*/
+	LOG(INFO) << "yvxiang : " << mapreduce_lite::NumReduceWorkers();
+	LOG(INFO) << "yvxiang : " << (mapreduce_lite::ReduceWorkers())[0];
   if (mapreduce_lite::IAmMapWorker()) {
     mapreduce_lite::MapWork();
   } else {

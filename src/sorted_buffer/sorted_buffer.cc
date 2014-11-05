@@ -68,7 +68,10 @@ void SortedBuffer::Insert(const std::string& key,
   CHECK(allocator_->Allocate(value.size(), &value_piece));
   memcpy(value_piece.Data(), value.data(), value.size());
 
-  key_value_list_.push_back(KeyValuePair(key_piece, value_piece));
+  KeyValuePair kp(key_piece, value_piece);
+
+  //key_value_list_.push_back(KeyValuePair(key_piece, value_piece));
+  key_value_list_.push_back(kp);
 }
 
 bool SortedBuffer::KeyValuePairLessThan(const KeyValuePair& x,

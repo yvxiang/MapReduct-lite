@@ -60,12 +60,12 @@ find_package(Protobuf REQUIRED)
 # Do not generate debug symbols;
 # Optimization level 2;
 #------------------------------------------------------------------------------
-add_definitions(" -Wall -Wno-sign-compare -Werror -O2 ")
+add_definitions(" -Wall -Wno-sign-compare -Werror -O0 -g ")
 
 #------------------------------------------------------------------------------
 # Declare where our project will be installed.
 #------------------------------------------------------------------------------
-set(CMAKE_INSTALL_PREFIX "/home/wyi/mapreduce-lite")
+set(CMAKE_INSTALL_PREFIX "/share/yc/mapreduce_lite")
 
 #------------------------------------------------------------------------------
 # Ensure executables are statically linked with libraries.
@@ -89,22 +89,22 @@ endif()
 # build all libraries and install them to /home/wyi/3rd-party, you
 # might need the following commands:
 #
-#  set(THIRD_PARTY_DIR "/home/wyi/3rd-party")
-#  set(BOOST_DIR "${THIRD_PARTY_DIR}/boost")
-#  set(GFLAGS_DIR "${THIRD_PARTY_DIR}/gflags")
-#  set(LIBEVENT_DIR "${THIRD_PARTY_DIR}/libevent")
-#
-#  include_directories(
-#   "${BOOST_DIR}/include"
-#   "${GFLAGS_DIR}/include"
-#   "${LIBEVENT_DIR}/include"
-#   )
-#
-# link_directories(
-#   "${BOOST_DIR}/lib"
-#   "${GFLAGS_DIR}/lib"
-#   "${LIBEVENT_DIR}/lib"
-#   )
+  set(THIRD_PARTY_DIR "/share/yc/3rd-party")
+  set(BOOST_DIR "${THIRD_PARTY_DIR}/boost")
+  set(GFLAGS_DIR "${THIRD_PARTY_DIR}/gflags")
+  set(LIBEVENT_DIR "${THIRD_PARTY_DIR}/libevent")
+
+  include_directories(
+   "${BOOST_DIR}/include"
+   "${GFLAGS_DIR}/include"
+   "${LIBEVENT_DIR}/include"
+   )
+
+ link_directories(
+   "${BOOST_DIR}/lib"
+   "${GFLAGS_DIR}/lib"
+   "${LIBEVENT_DIR}/lib"
+   )
 #
 # On MacOS X, Homebrew installs header files to /usr/local/include and
 # libraries to /usr/local/lib.

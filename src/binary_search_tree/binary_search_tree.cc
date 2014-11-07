@@ -37,3 +37,8 @@ void BinarySearchTree::insert(std::string key, void *value)
 
 	cur_node->insert(key, value);
 }
+void BinarySearchTree::modify_val(void *val)
+{
+	data_->set_value(val);
+}
+

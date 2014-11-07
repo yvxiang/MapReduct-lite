@@ -4,14 +4,14 @@ class BinarySearchTree;
 class DataNode {
 	public :
 		DataNode() : value_(NULL) {}
-		~DataNode() { free(value_); }
+		~DataNode() { }
 		void set_key(std::string key) { key_ = key; } 
 		void set_value(void *value) { value_ = value; }
 		const std::string& get_key() { return key_; }
 		const void* get_value() { return value_; }
 	private:
 		std::string key_;
-		void *value_;
+		void* value_;
 };
 
 class BinarySearchTree {
@@ -24,8 +24,11 @@ class BinarySearchTree {
 		}
 		bool find(const std::string &key);
 		void insert(std::string key, void *value);
+		void modify_val(void *val);
 		std::string data() { return data_->get_key(); }
 		bool empty() { return data_ == NULL; }
+		const std::string get_key() { return data_->get_key(); }
+		const void* get_value() { return data_->get_value(); }
 		BinarySearchTree *get_lchild() { return left_child; }
 		BinarySearchTree *get_rchild() { return right_child; }
 

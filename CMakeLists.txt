@@ -133,6 +133,7 @@ link_directories(
   "${PROJECT_BINARY_DIR}/src/hash"
   "${PROJECT_BINARY_DIR}/src/system"
   "${PROJECT_BINARY_DIR}/src/mapreduce_lite"
+  "${PROJECT_BINARY_DIR}/src/binary_search_tree"
   "${BOOST_DIR}/lib"
   "${GFLAGS_DIR}/lib"
   "${GTEST_DIR}/lib"
@@ -149,3 +150,4 @@ add_subdirectory(src/hash)
 add_subdirectory(src/system)
 add_subdirectory(src/sorted_buffer)
 add_subdirectory(src/mapreduce_lite)
+add_subdirectory(src/binary_search_tree)

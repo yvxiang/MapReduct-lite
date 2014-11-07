@@ -15,7 +15,7 @@ bool BinarySearchTree::find(const std::string &key)
 	}
 }
 	
-void BinarySearchTree::insert(std::string &key, void *value)
+void BinarySearchTree::insert(std::string key, void *value)
 {
 	if(this->empty()) {
 		data_ = new DataNode();

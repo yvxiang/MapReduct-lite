@@ -1,4 +1,5 @@
 #include <string>
+#include <stdlib.h>
 class BinarySearchTree;
 class DataNode {
 	public :

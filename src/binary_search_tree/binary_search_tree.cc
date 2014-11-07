@@ -1,5 +1,6 @@
 #include "src/binary_search_tree/binary_search_tree.h"
 #include <string>
+#include <stdlib.h>
 
 bool BinarySearchTree::find(const std::string &key)
 {
@@ -8,9 +9,9 @@ bool BinarySearchTree::find(const std::string &key)
 	if(data_->get_key() == key) {
 		return true;
 	} else if(data_->get_key() < key) {
-		return left_child_->find(key);
+		return left_child->find(key);
 	} else {
-		return right_child_->find(key);
+		return right_child->find(key);
 	}
 }
 	

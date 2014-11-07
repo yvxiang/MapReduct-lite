@@ -44,6 +44,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
 #include "src/strutil/join_strings.h"
 #include "src/strutil/stringprintf.h"
 #include "src/system/filepattern.h"
+#include "src/binary_search_tree/binary_search_tree.h"
 
 
 CLASS_REGISTER_IMPLEMENT_REGISTRY(mapreduce_lite_mapper_registry,
@@ -440,6 +441,14 @@ void MapWork() {
 //-----------------------------------------------------------------------------
 // Implementation of reduce worker:
 //-----------------------------------------------------------------------------
+void binary_search_tree_endreduce(scoped_ptr<BinarySearchTree> &root)
+{
+	if(!root)
+		return ;
+	binary_search_tree_endreduce(root->get_lchild());
+	EndReduce(root->get_key(), root->get_value());
+	binary_search_tree_endreduce(root->get_rchild());
+}
 void ReduceWork() {
   LOG(INFO) << "Reduce worker in "
             << (FLAGS_mr_batch_reduction ? "batch " : "incremental ")
@@ -458,12 +467,11 @@ void ReduceWork() {
   // void*, and is NULL for the first value in a reduce input comes)
   // and a reduce value.  It should update the intermediate result
   // using the value.
-  typedef map<string, void*> PartialReduceResults;
-  scoped_ptr<PartialReduceResults> partial_reduce_results;
+  scoped_ptr<BinarySearchTree> partial_reduce_results;
 
   // Initialize partial reduce results, or reduce input buffer.
   if (!FLAGS_mr_batch_reduction) {
-    partial_reduce_results.reset(new PartialReduceResults);
+    partial_reduce_results.reset(new BinarySearchTree);
   }
 
   // Loop over map outputs arrived in this reduce worker.
@@ -489,14 +497,12 @@ void ReduceWork() {
 
       // Begin a new reduce, which insert a partial result, or does
       // partial reduce, which updates a partial result.
-      PartialReduceResults::iterator iter = partial_reduce_results->find(key);
-      if (iter == partial_reduce_results->end()) {
-        (*partial_reduce_results)[key] =
-            reinterpret_cast<IncrementalReducer*>(GetReducer().get())->
-            BeginReduce(key, value);
+      BinarySearchTree *node = partial_reduce_results->find(key);
+      if(node == NULL) {
+	      partial_reduce_results->insert(key, BeginReduce(key, value));
       } else {
-        reinterpret_cast<IncrementalReducer*>(GetReducer().get())->
-            PartialReduce(key, value, iter->second);
+	      node->modify_val(PartialReduce(key, value, node->get_value());
+
       }
 
       if ((count_map_output % 5000) == 0) {
@@ -515,16 +521,7 @@ void ReduceWork() {
   // in batch reduction mode.
   if (!FLAGS_mr_batch_reduction) {
     LOG(INFO) << "Finalizing incremental reduction ...";
-    for (PartialReduceResults::const_iterator iter =
-             partial_reduce_results->begin();
-         iter != partial_reduce_results->end(); ++iter) {
-      reinterpret_cast<IncrementalReducer*>(GetReducer().get())->
-          EndReduce(iter->first, iter->second);
-      // Note: the deletion of iter->second must be done by the user
-      // program in EndReduce, because mrml.cc does not know the type of
-      // ReducePartialResult defined by the user program.
-      ++count_reduce;
-    }
+    binary_search_tree_endreduce(partial_reduce_results);
     LOG(INFO) << "Succeeded finalizing incremental reduction.";
   } else {
     LOG(INFO) << "Start batch reduction ...";

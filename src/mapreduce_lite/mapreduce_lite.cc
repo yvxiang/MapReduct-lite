@@ -443,11 +443,16 @@ void MapWork() {
 //-----------------------------------------------------------------------------
 void binary_search_tree_endreduce(scoped_ptr<BinarySearchTree> &root)
 {
-	if(!root)
+	if(root == NULL)
 		return ;
-	binary_search_tree_endreduce(root->get_lchild());
-	EndReduce(root->get_key(), root->get_value());
-	binary_search_tree_endreduce(root->get_rchild());
+	scoped_ptr<BinarySearchTree> lchild(root->get_lchild());
+	binary_search_tree_endreduce(lchild);
+
+	reinterpret_cast<IncrementalReducer*>(GetReducer().get())->
+		EndReduce(root->get_key(), root->get_value());
+
+	scoped_ptr<BinarySearchTree> rchild(root->get_rchild());
+	binary_search_tree_endreduce(rchild);
 }
 void ReduceWork() {
   LOG(INFO) << "Reduce worker in "
@@ -497,12 +502,14 @@ void ReduceWork() {
 
       // Begin a new reduce, which insert a partial result, or does
       // partial reduce, which updates a partial result.
-      BinarySearchTree *node = partial_reduce_results->find(key);
-      if(node == NULL) {
-	      partial_reduce_results->insert(key, BeginReduce(key, value));
+     BinarySearchTree *node = partial_reduce_results->find(key);
+     if(node == NULL) {
+	      partial_reduce_results->insert(key,
+				reinterpret_cast<IncrementalReducer*>(GetReducer().get())->
+					            BeginReduce(key, value));
       } else {
-	      node->modify_val(PartialReduce(key, value, node->get_value());
-
+				reinterpret_cast<IncrementalReducer*>(GetReducer().get())->
+					            PartialReduce(key, value, node->get_value());
       }
 
       if ((count_map_output % 5000) == 0) {

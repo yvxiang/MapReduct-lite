@@ -28,6 +28,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
 
 #include "src/base/class_register.h"
 #include "src/sorted_buffer/sorted_buffer.h"
+#include "src/base/scoped_ptr.h"
 
 namespace google {
 namespace protobuf {
@@ -216,6 +217,7 @@ class BatchReducer : public ReducerBase {
                       ReduceInputIterator* values) = 0;
 };
 
+scoped_ptr<ReducerBase>& GetReducer(void);
 }  // namespace mapreduce_lite
 
 

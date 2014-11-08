@@ -441,19 +441,6 @@ void MapWork() {
 //-----------------------------------------------------------------------------
 // Implementation of reduce worker:
 //-----------------------------------------------------------------------------
-void binary_search_tree_endreduce(scoped_ptr<BinarySearchTree> &root)
-{
-	if(root == NULL)
-		return ;
-	scoped_ptr<BinarySearchTree> lchild(root->get_lchild());
-	binary_search_tree_endreduce(lchild);
-
-	reinterpret_cast<IncrementalReducer*>(GetReducer().get())->
-		EndReduce(root->get_key(), root->get_value());
-
-	scoped_ptr<BinarySearchTree> rchild(root->get_rchild());
-	binary_search_tree_endreduce(rchild);
-}
 void ReduceWork() {
   LOG(INFO) << "Reduce worker in "
             << (FLAGS_mr_batch_reduction ? "batch " : "incremental ")

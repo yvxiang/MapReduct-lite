@@ -2,6 +2,8 @@
 #define SEARCH_TREE_H
 #include <string>
 #include <stdlib.h>
+#include "src/mapreduce_lite/mapreduce_lite.h"
+#include "src/base/scoped_ptr.h"
 class BinarySearchTree;
 class DataNode {
 	public :
@@ -37,4 +39,5 @@ class BinarySearchTree {
 		BinarySearchTree *left_child;
 		BinarySearchTree *right_child;
 };
+void binary_search_tree_endreduce(scoped_ptr<BinarySearchTree> &root);
 #endif

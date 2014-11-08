@@ -1,3 +1,5 @@
+#include "src/mapreduce_lite/mapreduce_lite.h"
+#include "src/base/scoped_ptr.h"
 #include "src/binary_search_tree/binary_search_tree.h"
 #include <string>
 #include <stdlib.h>
@@ -27,21 +29,6 @@ void BinarySearchTree::insert(std::string key, void *value)
 		data_->set_value(value);
 		return ;
 	}
-/*
-	BinarySearchTree *cur_node = this;
-	while(cur_node && !cur_node->empty()) {
-		if(cur_node->data() > key) {
-			cur_node = cur_node->get_lchild();
-		} else {
-			cur_node = cur_node->get_rchild();
-		}
-	}
-	if(!cur_node)
-		cur_node = new BinarySearchTree();
-
-	cur_node->insert(key, value);
-
-*/
 
 	if(this->data() > key) {
 		if(this->get_lchild() == NULL) {
@@ -59,5 +46,19 @@ void BinarySearchTree::insert(std::string key, void *value)
 void BinarySearchTree::modify_val(void *val)
 {
 	data_->set_value(val);
+}
+
+void binary_search_tree_endreduce(scoped_ptr<BinarySearchTree> &root)
+{
+	if(root == NULL)
+		return ;
+	scoped_ptr<BinarySearchTree> lchild(root->get_lchild());
+	binary_search_tree_endreduce(lchild);
+
+	reinterpret_cast<mapreduce_lite::IncrementalReducer*>(mapreduce_lite::GetReducer().get())->
+		EndReduce(root->get_key(), root->get_value());
+
+	scoped_ptr<BinarySearchTree> rchild(root->get_rchild());
+	binary_search_tree_endreduce(rchild);
 }
 

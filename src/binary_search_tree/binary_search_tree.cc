@@ -2,16 +2,20 @@
 #include <string>
 #include <stdlib.h>
 
-bool BinarySearchTree::find(const std::string &key)
+BinarySearchTree* BinarySearchTree::find(const std::string &key)
 {
 	if(!data_)
-		return false;
+		return NULL;
 	if(data_->get_key() == key) {
-		return true;
-	} else if(data_->get_key() < key) {
-		return left_child->find(key);
+		return this;
+	} else if(data_->get_key() > key) {
+		if(left_child)
+			return left_child->find(key);
+		return NULL;
 	} else {
-		return right_child->find(key);
+		if(right_child)
+			return right_child->find(key);
+		return NULL;
 	}
 }
 	
@@ -23,7 +27,7 @@ void BinarySearchTree::insert(std::string key, void *value)
 		data_->set_value(value);
 		return ;
 	}
-
+/*
 	BinarySearchTree *cur_node = this;
 	while(cur_node && !cur_node->empty()) {
 		if(cur_node->data() > key) {
@@ -36,6 +40,21 @@ void BinarySearchTree::insert(std::string key, void *value)
 		cur_node = new BinarySearchTree();
 
 	cur_node->insert(key, value);
+
+*/
+
+	if(this->data() > key) {
+		if(this->get_lchild() == NULL) {
+			left_child = new BinarySearchTree();
+		}
+		left_child->insert(key, value);
+	} else {
+		if(this->get_rchild() == NULL) {
+			right_child = new BinarySearchTree();
+		}
+		right_child->insert(key, value);
+	}
+		
 }
 void BinarySearchTree::modify_val(void *val)
 {

@@ -48,7 +48,7 @@ int main(int argc, char** argv) {
   LOG(INFO) << "I am a " << (mapreduce_lite::IAmMapWorker() ? "map worker" :
                              "reduce worker");
 
-sleep(100);
+//sleep(10);
 /*
   size_t i;
   for(i = 0; i < argc; i++)

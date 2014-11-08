@@ -4,8 +4,8 @@ add_library(binary_search_tree binary_search_tree.cc)
 # Build unittests.
 set(LIBS base binary_search_tree gtest pthread)
 
-#add_executable(md5_hash_test md5_hash_test.cc)
-#target_link_libraries(md5_hash_test gtest_main ${LIBS})
+add_executable(binary_search_tree_test binary_search_tree_test.cc)
+target_link_libraries(binary_search_tree_test base gtest_main ${LIBS})
 
 # Install library and header files
 install(TARGETS binary_search_tree DESTINATION lib/paralgo)
